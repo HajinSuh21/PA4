@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference-consumer
+  namespace: team17
+  labels:
+    app: inference-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inference-consumer
+  template:
+    metadata:
+      labels:
+        app: inference-consumer
+    spec:
+      containers:
+      - name: inference-consumer
+        image: 192.168.1.81:5000/team17/inference-consumer

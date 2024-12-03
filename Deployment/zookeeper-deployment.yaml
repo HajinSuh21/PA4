@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+  namespace: team17
+spec:
+  replicas:
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - name: zookeeper
+        image: 192.168.1.81:5000/team17/zookeeper
+        ports:
+        - containerPort: 2181
+        volumeMounts:
+        - name: zookeeper-data
+          mountPath: /data
+        - name: zookeeper-datalog
+          mountPath: /datalog
+      volumes:
+      - name: zookeeper-data
+        emptyDir: {}
+      - name: zookeeper-datalog
+        emptyDir: {}
