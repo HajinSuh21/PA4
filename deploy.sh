@@ -25,7 +25,7 @@ sudo docker tag wurstmeister/zookeeper 192.168.1.81:5000/team17/zookeeper
 sudo docker push 192.168.1.81:5000/team17/zookeeper
 
 
-sudo docker build -t inference-consumer ./inference_consumer
+sudo docker build -f ./inference_consumer/dockerfile -t inference-consumer .
 sudo docker tag inference-consumer 192.168.1.81:5000/team17/inference-consumer
 sudo docker push 192.168.1.81:5000/team17/inference-consumer
 

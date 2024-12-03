@@ -19,7 +19,7 @@ RUN pip install --upgrade pip && \
     pip install kafka-python tensorflow pandas numpy opencv-python six
 
 # Copy the Python consumer script into the Docker container
-COPY inference_consumer.py /app/inference_consumer_docker.py
+COPY ./inference_consumer/inference_consumer.py /app/inference_consumer_docker.py
 
 # Set the working directory
 WORKDIR /app
