@@ -29,11 +29,11 @@ sudo docker build -f ./inference_consumer/dockerfile -t inference-consumer .
 sudo docker tag inference-consumer 192.168.1.81:5000/team17/inference-consumer
 sudo docker push 192.168.1.81:5000/team17/inference-consumer
 
-sudo docker build -t database-consumer ./db_consumer
+sudo docker build -f ./db_consumer/dockerfile -t database-consumer .
 sudo docker tag database-consumer 192.168.1.81:5000/team17/database-consumer
 sudo docker push 192.168.1.81:5000/team17/database-consumer
 
-sudo docker build -t iot-producer ./iot_producer
+sudo docker build -f ./iot_producer -t iot-producer .
 sudo docker tag iot-producer 192.168.1.81:5000/team17/iot-producer
 sudo docker push 192.168.1.81:5000/team17/iot-producer
 

@@ -19,7 +19,7 @@ RUN pip install --upgrade pip && \
     pip install kafka-python requests pandas numpy opencv-python six
 
 # Copy the Python consumer script into the Docker container
-COPY database_consumer.py /app/database_consumer_docker.py
+COPY ./database_consumer/database_consumer.py /app/database_consumer_docker.py
 
 # Set the working directory
 WORKDIR /app

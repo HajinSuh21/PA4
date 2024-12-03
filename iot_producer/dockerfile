@@ -20,7 +20,7 @@ RUN pip install --upgrade pip && \
     pip install kafka-python tensorflow pandas numpy opencv-python six
 
 # Copy the Python script into the Docker container
-COPY iot_producer.py /app/iot_producer_docker.py
+COPY ./iot_producer/iot_producer.py /app/iot_producer_docker.py
 RUN mkdir -p /app/output
 # Set the working directory
 WORKDIR /app
