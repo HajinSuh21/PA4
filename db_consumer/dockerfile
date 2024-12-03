@@ -1,22 +1,22 @@
-# # Use the latest version of Ubuntu as the base image
-# FROM ubuntu:latest
+# Use the latest version of Ubuntu as the base image
+FROM ubuntu:latest
 
-# # Set environment variables to avoid interactive prompts during package installation
-# ENV DEBIAN_FRONTEND=noninteractive
+# Set environment variables to avoid interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
 
-# # Install required dependencies: Python 3, pip, venv, and system packages
-# RUN apt-get update && \
-#     apt-get install -y python3 python3-pip python3-venv python3-dev \
-#     build-essential libopencv-dev && \
-#     apt-get clean
+# Install required dependencies: Python 3, pip, venv, and system packages
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip python3-venv python3-dev \
+    build-essential libopencv-dev && \
+    apt-get clean
 
-# # Create a virtual environment for the Python packages
-# RUN python3 -m venv /app/venv
+# Create a virtual environment for the Python packages
+RUN python3 -m venv /app/venv
 
-# ENV PATH="/app/venv/bin:$PATH"
-# # Activate the virtual environment and install necessary Python packages via pip
-# RUN pip install --upgrade pip && \
-#     pip install kafka-python requests pandas numpy opencv-python six
+ENV PATH="/app/venv/bin:$PATH"
+# Activate the virtual environment and install necessary Python packages via pip
+RUN pip install --upgrade pip && \
+    pip install kafka-python requests pandas numpy opencv-python six
 
 # Copy the Python consumer script into the Docker container
 COPY ./db_consumer/database_consumer.py /app/database_consumer_docker.py
