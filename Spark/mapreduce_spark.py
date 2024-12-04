@@ -10,10 +10,12 @@ DB_NAME = "images_database"
 if __name__ == "__main__":
     spark = SparkSession.builder\
         .appName("MapReduce for incorrect inferences")\
+        .config("spark.sql.warehouse.dir", "file:///tmp/spark-warehouse") \
         .getOrCreate()
 
     df = spark.read.format("jdbc") \
         .option("cloudant.host", "couchdb-service:5984") \
+        .option("url", "http://team:cloudcomputing@database:5984") \
         .option("cloudant.username", USERNAME) \
         .option("cloudant.password", PASSWORD) \
         .option("database", DB_NAME) \
