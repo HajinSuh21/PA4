@@ -12,7 +12,7 @@ if __name__ == "__main__":
         .appName("MapReduce for incorrect inferences")\
         .getOrCreate()
 
-    df = spark.read.format("org.apache.bahir.cloudant") \
+    df = spark.read.format("jdbc") \
         .option("cloudant.host", "couchdb-service:5984") \
         .option("cloudant.username", USERNAME) \
         .option("cloudant.password", PASSWORD) \
