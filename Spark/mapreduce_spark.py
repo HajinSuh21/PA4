@@ -19,6 +19,7 @@ if __name__ == "__main__":
         .option("cloudant.username", USERNAME) \
         .option("cloudant.password", PASSWORD) \
         .option("database", DB_NAME) \
+        .option("dbtable", DB_NAME) \
         .load()
 
     result_df = (
