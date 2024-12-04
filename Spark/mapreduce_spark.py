@@ -8,26 +8,25 @@ PASSWORD = "cloudcomputing"
 DB_NAME = "images_database"
 
 if __name__ == "__main__":
-    spark = SparkSession.builder\
-        .appName("MapReduce for incorrect inferences")\
-        .config("spark.sql.warehouse.dir", "file:///tmp/spark-warehouse") \
+    spark = SparkSession.builder \
+        .appName("IncorrectPredictionsCounter") \
+        .config("cloudant.host", f"{db_ip}:5984") \
+        .config("cloudant.username", USERNAME) \
+        .config("cloudant.password", PASSWORD) \
+        .config("cloudant.use._id", "true") \
         .getOrCreate()
 
     df = spark.read.format("org.apache.bahir.cloudant") \
-        .option("url", "http://team:cloudcomputing@database:5984") \
-        .option("cloudant.username", USERNAME) \
-        .option("cloudant.password", PASSWORD) \
         .option("database", DB_NAME) \
-        .option("dbtable", DB_NAME) \
         .load()
+    
+    df = df.select("_id", "GroundTruth", "prediction") \
+           .filter(col("GroundTruth").isNotNull() & col("prediction").isNotNull())
 
-    result_df = (
-        df.filter(col("inference_result") == 1)
-        .groupBy("producer")                  
-        .agg(count("*").alias("incorrect_count"))
-    )
+    df = df.withColumn("IsIncorrect", col("GroundTruth") != col("prediction"))
 
-    # Print results
-    result_df.show()
+    total_incorrect = df.filter(col("IsIncorrect") == True).count()
+
+    print(f"Total number of incorrect predictions: {total_incorrect}")
 
     spark.stop()
