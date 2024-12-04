@@ -1,32 +1,18 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, count
 
-db_ip = "database"
-COUCHDB_URL = f"http://{db_ip}:5984"
-USERNAME = "team"
-PASSWORD = "cloudcomputing"
-DB_NAME = "images_database"
+spark = SparkSession.builder \
+    .appName("CouchDB MapReduce") \
+    .getOrCreate()
 
-if __name__ == "__main__":
-    spark = SparkSession.builder \
-        .appName("IncorrectPredictionsCounter") \
-        .config("cloudant.host", f"{db_ip}:5984") \
-        .config("cloudant.username", USERNAME) \
-        .config("cloudant.password", PASSWORD) \
-        .config("cloudant.use._id", "true") \
-        .getOrCreate()
+couchdb_url = "http://team:cloudcomputing@database:5984/images_database/_all_docs?include_docs=true"
 
-    df = spark.read.format("org.apache.bahir.cloudant") \
-        .option("database", DB_NAME) \
-        .load()
-    
-    df = df.select("_id", "GroundTruth", "prediction") \
-           .filter(col("GroundTruth").isNotNull() & col("prediction").isNotNull())
+df = spark.read.format("json").load(couchdb_url)
 
-    df = df.withColumn("IsIncorrect", col("GroundTruth") != col("prediction"))
+documents_df = df.select("rows.doc.*")
 
-    total_incorrect = df.filter(col("IsIncorrect") == True).count()
+incorrect_predictions_df = documents_df.filter(col("GroundTruth") != col("prediction"))
 
-    print(f"Total number of incorrect predictions: {total_incorrect}")
+total_incorrect = incorrect_predictions_df.count()
 
-    spark.stop()
+print(f"Total incorrect predictions: {total_incorrect}")
