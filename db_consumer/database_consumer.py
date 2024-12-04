@@ -62,7 +62,7 @@ def insert_document(db_name: str, doc: dict, action: str = "post") -> None:
         print(f"Error inserting document: {response.json()}",
               f"status code: {response.status_code}")
         
-def get_data(db_name: str):
+def get_data(db_name: str, doc: dict):
     get_response = requests.get(f"{COUCHDB_URL}/{db_name}/{doc['_id']}", auth=(USERNAME, PASSWORD))
     if get_response.status_code == 200:
         return [row['doc'] for row in get_response.json().get('rows', [])]
@@ -87,8 +87,6 @@ def do_map_reduce(data: list):
 if __name__ == "__main__":
     DB_NAME = "images_database"
     create_database(DB_NAME)
-    data = get_data(DB_NAME)
-    total = do_map_reduce(data)
 
     consumer = KafkaConsumer(bootstrap_servers="kafka:9092")
     consumer.subscribe(topics=["images", "prediction"])
@@ -100,6 +98,10 @@ if __name__ == "__main__":
                 del document["ID"]
                 insert_document(DB_NAME, document, action="post")
                 time.sleep(0.001)
+                data = get_data(DB_NAME, document['_id'])
+                if data:
+                    total = do_map_reduce(data)
+                    print(total)
             except KeyError:
                 print("json object does not have _id key.")
         elif msg.topic == "prediction":
@@ -109,6 +111,10 @@ if __name__ == "__main__":
                 del document["ID"]
                 insert_document(DB_NAME, document, action="put")
                 time.sleep(0.001)
+                data = get_data(DB_NAME, document['_id'])
+                if data:
+                    total = do_map_reduce(data)
+                    print(total)
             except KeyError:
                 print("json object does not have _id key.")
 
