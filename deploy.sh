@@ -25,17 +25,17 @@
 # sudo docker push 192.168.1.81:5000/team17/zookeeper
 
 
-sudo docker build -f ./inference_consumer/dockerfile -t inference-consumer .
-sudo docker tag inference-consumer 192.168.1.81:5000/team17/inference-consumer
-sudo docker push 192.168.1.81:5000/team17/inference-consumer
+# sudo docker build -f ./inference_consumer/dockerfile -t inference-consumer .
+# sudo docker tag inference-consumer 192.168.1.81:5000/team17/inference-consumer
+# sudo docker push 192.168.1.81:5000/team17/inference-consumer
 
 # sudo docker build -f ./db_consumer/dockerfile -t database-consumer .
 # sudo docker tag database-consumer 192.168.1.81:5000/team17/database-consumer
 # sudo docker push 192.168.1.81:5000/team17/database-consumer
 
-sudo docker build -f ./iot_producer/dockerfile -t iot-producer .
-sudo docker tag iot-producer 192.168.1.81:5000/team17/iot-producer
-sudo docker push 192.168.1.81:5000/team17/iot-producer
+# sudo docker build -f ./iot_producer/dockerfile -t iot-producer .
+# sudo docker tag iot-producer 192.168.1.81:5000/team17/iot-producer
+# sudo docker push 192.168.1.81:5000/team17/iot-producer
 
 sudo docker build -f ./Spark/spark_dockerfile -t my-spark .
 sudo docker tag my-spark:latest 192.168.1.81:5000/team17/my-spark
