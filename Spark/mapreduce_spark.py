@@ -1,15 +1,27 @@
+import requests
+import json
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, count
 
+COUCHDB_URL = "http://team:cloudcomputing@database:5984/images_database/_all_docs?include_docs=true"
+LOCAL_JSON_FILE = "/home/cc/team17/PA4/tmp/couchdb_data.json"
+
+response = requests.get(COUCHDB_URL)
+if response.status_code == 200:
+    data = response.json()
+    # Write JSON data to a file
+    with open(LOCAL_JSON_FILE, "w") as file:
+        json.dump(data["rows"], file)
+else:
+    raise Exception(f"Failed to fetch data from CouchDB: {response.status_code}, {response.text}")
+
 spark = SparkSession.builder \
-    .appName("CouchDB MapReduce") \
+    .appName("Incorrect Prediction MapReduce") \
     .getOrCreate()
 
-couchdb_url = "http://team:cloudcomputing@database:5984/images_database/_all_docs?include_docs=true"
+df = spark.read.format("json").load(LOCAL_JSON_FILE)
 
-df = spark.read.format("json").load(couchdb_url)
-
-documents_df = df.select("rows.doc.*")
+documents_df = df.select("doc.*")
 
 incorrect_predictions_df = documents_df.filter(col("GroundTruth") != col("prediction"))
 
