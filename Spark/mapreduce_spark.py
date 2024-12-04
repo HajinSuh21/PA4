@@ -1,35 +1,38 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
 import requests
 import json
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, count
 
-db_ip = "database"
-db_name = "images_database"
-COUCHDB_URL = f"http://{db_ip}:5984"
+COUCHDB_URL = "http://database:5984/images_database/_all_docs?include_docs=true"
 USERNAME = "team"
 PASSWORD = "cloudcomputing"
-LOCAL_JSON_FILE = "/home/cc/team17/PA4/tmp/couchdb_data.json"
 
-response = requests.get(f"{COUCHDB_URL}/{db_name}",
-                            auth=(USERNAME, PASSWORD))
-if response.status_code == 200:
-    data = response.json()
-    # Write JSON data to a file
-    with open(LOCAL_JSON_FILE, "w") as file:
-        json.dump(data["rows"], file)
-else:
-    raise Exception(f"Failed to fetch data from CouchDB: {response.status_code}, {response.text}")
+def fetch_documents():
+    response = requests.get(COUCHDB_URL, auth=(USERNAME, PASSWORD))
+    if response.status_code == 200:
+        return response.json()['rows']
+    else:
+        print(f"Error fetching documents: {response.status_code}")
+        return []
 
 spark = SparkSession.builder \
-    .appName("Incorrect Prediction MapReduce") \
+    .appName("Incorrect Predictions Count") \
     .getOrCreate()
 
-df = spark.read.format("json").load(LOCAL_JSON_FILE)
+documents = fetch_documents()
 
-documents_df = df.select("doc.*")
+data = []
+for doc in documents:
+    if 'doc' in doc:
+        record = doc['doc']
+        # Ensure both ground_truth and prediction are present
+        if 'ground_truth' in record and 'prediction' in record:
+            data.append((record['ground_truth'], record['prediction']))
 
-incorrect_predictions_df = documents_df.filter(col("GroundTruth") != col("prediction"))
+df = spark.createDataFrame(data, ["ground_truth", "prediction"])
 
-total_incorrect = incorrect_predictions_df.count()
+incorrect_predictions_count = df.filter(col("ground_truth") != col("prediction")).count()
 
-print(f"Total incorrect predictions: {total_incorrect}")
+print(f"Total incorrect predictions: {incorrect_predictions_count}")
+
+spark.stop()
