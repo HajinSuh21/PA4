@@ -9,6 +9,7 @@ if sys.version_info >= (3, 12, 0):
 from kafka import KafkaConsumer  # consumer of events
 
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, count, when
 
 # CouchDB configuration
 db_ip = "database"
@@ -17,16 +18,12 @@ USERNAME = "team"
 PASSWORD = "cloudcomputing"
 
 # Function to check if a database exists
-
-
 def database_exists(db_name):
     response = requests.get(f"{COUCHDB_URL}/{db_name}",
                             auth=(USERNAME, PASSWORD))
     return response.status_code == 200
 
 # Function to create a database if it doesn't exist
-
-
 def create_database(db_name):
     if not database_exists(db_name):
         response = requests.put(
@@ -41,8 +38,6 @@ def create_database(db_name):
         print(f"Database '{db_name}' already exists.")
 
 # Function to insert a document
-
-
 def insert_document(db_name: str, doc: dict, action: str = "post") -> None:
     if action == "post":
         response = requests.post(
@@ -61,31 +56,40 @@ def insert_document(db_name: str, doc: dict, action: str = "post") -> None:
     else:
         print(f"Error inserting document: {response.json()}",
               f"status code: {response.status_code}")
-        
-def get_data(db_name: str, doc: dict):
-    get_response = requests.get(f"{COUCHDB_URL}/{db_name}/{doc['_id']}", auth=(USERNAME, PASSWORD))
-    if get_response.status_code == 200:
-        return [row['doc'] for row in get_response.json().get('rows', [])]
-    else:
-        return []
-    
-def do_map_reduce(data: list):
-    spark = SparkSession.builder.appName("MapReduceInference").getOrCreate()
-    rdd = spark.sparkContext.parallelize(data)
-
-    wrong_counts = (
-        rdd.filter(lambda x: x['IsCorrect'] == 0)
-            .map(lambda x: (x['ID'].split('_')[0], 1))
-            .reduceByKey(lambda a, b: a + b)
-    )
-    
-    total = wrong_counts.collect()
-    spark.stop()
-    return total
 
 #get incorrect count
 #extend wordcount.py and read directly from the database using Spark
 #run mapreduce
+
+# Function to read data from CouchDB using Spark
+def read_couchdb_data(spark, db_name):
+    couchdb_url = f"http://{USERNAME}:{PASSWORD}@{db_ip}:5984/{db_name}"
+    return spark.read.format("org.apache.bahir.cloudant").option("cloudant.database", db_name).load()
+
+def mapreduce_incorrect_count(df):
+    return (
+        df.filter(col("inference_result") == 1)  # Filter incorrect inferences
+        .groupBy("producer")  # Group by producer
+        .agg(count("*").alias("incorrect_count"))  # Count occurrences
+    )
+
+def trigger_spark_processing():
+    print("Starting Spark processing...")
+    spark = SparkSession.builder \
+        .appName("Inference Count Analysis") \
+        .config("spark.master", "local[*]") \
+        .config("cloudant.host", db_ip) \
+        .config("cloudant.username", USERNAME) \
+        .config("cloudant.password", PASSWORD) \
+        .getOrCreate()
+
+    try:
+        df = read_couchdb_data(spark, DB_NAME)
+        result_df = mapreduce_incorrect_count(df)
+        print("Incorrect inference counts per producer:")
+        result_df.show()
+    finally:
+        spark.stop()
 
 # Main logic
 if __name__ == "__main__":
@@ -94,6 +98,9 @@ if __name__ == "__main__":
 
     consumer = KafkaConsumer(bootstrap_servers="kafka:9092")
     consumer.subscribe(topics=["images", "prediction"])
+
+    message_count = 0
+
     for msg in consumer:
         if msg.topic == "images":
             document = json.loads(msg.value.decode('utf-8'))
@@ -102,10 +109,6 @@ if __name__ == "__main__":
                 del document["ID"]
                 insert_document(DB_NAME, document, action="post")
                 time.sleep(0.001)
-                data = get_data(DB_NAME, document['_id'])
-                if data:
-                    total = do_map_reduce(data)
-                    print(total)
             except KeyError:
                 print("json object does not have _id key.")
         elif msg.topic == "prediction":
@@ -115,12 +118,10 @@ if __name__ == "__main__":
                 del document["ID"]
                 insert_document(DB_NAME, document, action="put")
                 time.sleep(0.001)
-                data = get_data(DB_NAME, document['_id'])
-                if data:
-                    total = do_map_reduce(data)
-                    print(total)
             except KeyError:
                 print("json object does not have _id key.")
 
-    for producer, count in total:
-        print(f"Producer: {producer}, Incorrect Inferences: {count}")
+        message_count += 1
+
+        if message_count == 10:
+            trigger_spark_processing()
