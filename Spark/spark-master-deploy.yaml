@@ -23,6 +23,10 @@ spec:                     # This is the specification
         app: sparkMasterApp        # some label to give to this pod (see the matching label above)
     spec:                 # actual specification
       hostname: spark-master-host
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
       nodeSelector:
         # we force k8s to run Spark master on this node
         kubernetes.io/hostname: kubemaster

@@ -83,6 +83,10 @@ def do_map_reduce(data: list):
     spark.stop()
     return total
 
+#get incorrect count
+#extend wordcount.py and read directly from the database using Spark
+#run mapreduce
+
 # Main logic
 if __name__ == "__main__":
     DB_NAME = "images_database"
