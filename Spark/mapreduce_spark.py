@@ -14,7 +14,6 @@ if __name__ == "__main__":
         .getOrCreate()
 
     df = spark.read.format("jdbc") \
-        .option("cloudant.host", "couchdb-service:5984") \
         .option("url", "http://team:cloudcomputing@database:5984") \
         .option("cloudant.username", USERNAME) \
         .option("cloudant.password", PASSWORD) \
