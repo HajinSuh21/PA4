@@ -10,6 +10,7 @@ PASSWORD = "cloudcomputing"
 def fetch_documents():
     response = requests.get(COUCHDB_URL, auth=(USERNAME, PASSWORD))
     if response.status_code == 200:
+        print(f"SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
         return response.json()['rows']
     else:
         print(f"Error fetching documents: {response.status_code}")
