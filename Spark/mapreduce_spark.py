@@ -13,7 +13,7 @@ if __name__ == "__main__":
         .config("spark.sql.warehouse.dir", "file:///tmp/spark-warehouse") \
         .getOrCreate()
 
-    df = spark.read.format("jdbc") \
+    df = spark.read.format("org.apache.bahir.cloudant") \
         .option("url", "http://team:cloudcomputing@database:5984") \
         .option("cloudant.username", USERNAME) \
         .option("cloudant.password", PASSWORD) \
