@@ -3,10 +3,14 @@ import json
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, count
 
-COUCHDB_URL = "http://team:cloudcomputing@database:5984/images_database/_all_docs?include_docs=true"
+db_ip = "database"
+COUCHDB_URL = f"http://{db_ip}:5984"
+USERNAME = "team"
+PASSWORD = "cloudcomputing"
 LOCAL_JSON_FILE = "/home/cc/team17/PA4/tmp/couchdb_data.json"
 
-response = requests.get(COUCHDB_URL)
+response = requests.get(f"{COUCHDB_URL}/{"images_database"}",
+                            auth=(USERNAME, PASSWORD))
 if response.status_code == 200:
     data = response.json()
     # Write JSON data to a file
