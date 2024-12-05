@@ -20,9 +20,9 @@ def get_all_documents(COUCHDB_URL, DB_NAME, USERNAME, PASSWORD):
         print(f"Error fetching documents: {response.json()}")
         return []
 
-# spark = SparkSession.builder \
-#     .appName("Incorrect Predictions Count") \
-#     .getOrCreate()
+spark = SparkSession.builder \
+    .appName("Incorrect Predictions Count") \
+    .getOrCreate()
 
 documents = get_all_documents(COUCHDB_URL, DB_NAME, USERNAME, PASSWORD)
 
