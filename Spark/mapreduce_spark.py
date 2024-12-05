@@ -3,7 +3,7 @@ from pyspark.sql.functions import col
 import requests
 import json
 
-db_ip = "database"
+db_ip = "team17/database"
 COUCHDB_URL = f"http://{db_ip}:5984"
 USERNAME = "team"
 PASSWORD = "cloudcomputing"
