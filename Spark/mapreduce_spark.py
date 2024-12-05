@@ -3,17 +3,20 @@ from pyspark.sql.functions import col
 import requests
 import json
 
-COUCHDB_URL = "http://10.0.0.15:5984"
+db_ip = "database"
+COUCHDB_URL = f"http://{db_ip}:5984"
 USERNAME = "team"
 PASSWORD = "cloudcomputing"
+DB_NAME = "orders_database"
 
-def fetch_documents():
-    response = requests.get(COUCHDB_URL, auth=(USERNAME, PASSWORD))
+def get_all_documents(COUCHDB_URL, DB_NAME, USERNAME, PASSWORD):
+    # Get all documents in the database
+    response = requests.get(
+        f"{COUCHDB_URL}/{DB_NAME}/_all_docs?include_docs=true", auth=(USERNAME, PASSWORD))
     if response.status_code == 200:
-        print(f"Success fetching documents")
-        return response.json()['ID']
+        return response.json()['rows']
     else:
-        print(f"Error fetching documents: {response.status_code}")
+        print(f"Error fetching documents: {response.json()}")
         return []
 
 spark = SparkSession.builder \
