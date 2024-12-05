@@ -14,5 +14,5 @@ spec:
         image: 192.168.1.81:5000/team17/mapreduce-spark
         imagePullPolicy: Always
         command: ["sh", "-c"]
-        args: ["python3 mapreduce_spark.py"]
+        args: ["python3 mapreduce_spark_docker.py"]
       restartPolicy: Never
