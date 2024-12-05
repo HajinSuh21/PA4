@@ -25,7 +25,7 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 documents = get_all_documents(COUCHDB_URL, DB_NAME, USERNAME, PASSWORD)
-data = []
+# data = []
 for doc in documents:
     print(doc)
 
