@@ -7,7 +7,7 @@ db_ip = "database"
 COUCHDB_URL = f"http://{db_ip}:5984"
 USERNAME = "team"
 PASSWORD = "cloudcomputing"
-DB_NAME = "orders_database"
+DB_NAME = "database"
 
 def get_all_documents(COUCHDB_URL, DB_NAME, USERNAME, PASSWORD):
     # Get all documents in the database
