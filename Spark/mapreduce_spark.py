@@ -14,6 +14,7 @@ def get_all_documents(COUCHDB_URL, DB_NAME, USERNAME, PASSWORD):
     response = requests.get(
         f"{COUCHDB_URL}/{DB_NAME}/_all_docs?include_docs=true", auth=(USERNAME, PASSWORD))
     if response.status_code == 200:
+        print(f"SUCCESS FETCHING DOCS")
         return response.json()['rows']
     else:
         print(f"Error fetching documents: {response.json()}")
