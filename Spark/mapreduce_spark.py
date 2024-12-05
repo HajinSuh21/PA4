@@ -11,7 +11,7 @@ def fetch_documents():
     response = requests.get(COUCHDB_URL, auth=(USERNAME, PASSWORD))
     if response.status_code == 200:
         print(f"Success fetching documents")
-        return response.json()
+        return response.json()['ID']
     else:
         print(f"Error fetching documents: {response.status_code}")
         return []
