@@ -10,7 +10,7 @@ spec:
         app: mapreduce-spark
     spec:
       containers:
-      - name: mapreduce_spark
+      - name: mapreduce-spark
         image: 192.168.1.81:5000/team17/mapreduce-spark
         imagePullPolicy: Always
         command: ["sh", "-c"]
