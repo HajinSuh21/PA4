@@ -57,7 +57,12 @@ def insert_document(db_name: str, doc: dict, action: str = "post") -> None:
 # Main logic
 if __name__ == "__main__":
     DB_NAME = "images_database"
+
+    print("creating database")
+
     create_database(DB_NAME)
+
+    print("database created")
 
     consumer = KafkaConsumer(bootstrap_servers="kafka:9092")
     consumer.subscribe(topics=["images", "prediction"])
