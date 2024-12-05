@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mapreduce_spark
+  namespace: team17
+spec:
+  template:
+    metadata:
+      labels:
+        app: mapreduce_spark
+    spec:
+      containers:
+      - name: mapreduce_spark
+        image: 192.168.1.81:5000/team17/mapreduce_spark
+        imagePullPolicy: Always
+        command: ["sh", "-c"]
+        args: ["python3 mapreduce_spark.py"]
+      restartPolicy: Never
