@@ -41,6 +41,12 @@
 # sudo docker tag my-spark:latest 192.168.1.81:5000/team17/my-spark
 # sudo docker push 192.168.1.81:5000/team17/my-spark
 
+sudo docker build -f ./Spark/mapreduce_dockerfile -t mapreduce-spark .
+sudo docker tag mapreduce-spark:latest 192.168.1.81:5000/team17/mapreduce-spark
+sudo docker push 192.168.1.81:5000/team17/mapreduce-spark
+
+kubectl apply -f ./Job/mapreduce-spark-job.yaml
+
 kubectl apply -f ./Spark/spark-master-svc.yaml
 kubectl apply -f ./Spark/spark-driver-svc.yaml
 kubectl apply -f ./Spark/spark-master-deploy.yaml
