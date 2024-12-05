@@ -23,7 +23,7 @@ spark = SparkSession.builder \
     .appName("Incorrect Predictions Count") \
     .getOrCreate()
 
-documents = get_all_documents(COUCHDB_URL, USERNAME, PASSWORD, DB_NAME)
+documents = get_all_documents(COUCHDB_URL, DB_NAME, USERNAME, PASSWORD)
 
 data = []
 for doc in documents:
