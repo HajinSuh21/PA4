@@ -25,8 +25,11 @@ if __name__ == "__main__":
 
     df.printSchema()
 
-    df_transformed = df.select(explode(df.columns[0]).alias("key", "data")) \
-        .selectExpr("data.Latency as Latency", "data.IsCorrect as IsCorrect")
+    # df_transformed = df.select(explode(df.columns[0]).alias("key", "data")) \
+    #     .selectExpr("data.Latency as Latency", "data.IsCorrect as IsCorrect")
+
+    df_transformed = df.select(explode(col("*")).alias("key", "data")) \
+    .select(col("data.Latency").alias("Latency"), col("data.IsCorrect").alias("IsCorrect"))
 
     incorrect_count = df_transformed.filter(col("IsCorrect") == 0).count()
 
