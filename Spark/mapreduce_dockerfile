@@ -20,10 +20,12 @@ RUN python3 -m venv /app/venv
 ENV PATH="/app/venv/bin:$PATH"
 # Activate the virtual environment and install necessary Python packages via pip
 RUN pip install --upgrade pip && \
-    pip install kafka-python requests pandas numpy pyspark
+    pip install kafka-python requests pyspark
 
 # Copy the Python script into the Docker container
 COPY ./Spark/mapreduce_spark.py /app/mapreduce_spark_docker.py
+COPY ./Spark/target/incorrect_count.json
+
 RUN mkdir -p /app/output
 # Set the working directory
 WORKDIR /app

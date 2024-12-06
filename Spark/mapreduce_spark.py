@@ -8,8 +8,6 @@ spark = SparkSession.builder \
     .appName("Incorrect Predictions Count") \
     .getOrCreate()
 
-spark.sql("refresh TABLE schema.table")
-
 local_json_path = "file:///home/cc/team17/PA4/Spark/target/incorrect_count.json"
 # spark.sparkContext.addFile(local_json_path)
 
