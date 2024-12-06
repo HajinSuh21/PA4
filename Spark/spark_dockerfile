@@ -32,7 +32,7 @@ RUN zcat spark-3.5.3-bin-hadoop3.tgz | tar xpof -
 COPY ./Spark/spark-env.sh /spark-3.5.3-bin-hadoop3/conf/
 COPY ./Spark/spark-worker.conf /spark-3.5.3-bin-hadoop3/conf/
 COPY ./Spark/spark-driver.conf /spark-3.5.3-bin-hadoop3/conf/
-COPY ./Spark/target/incorrect_count.json
+COPY ./Spark/target/incorrect_count.json /
 
 # Now we set environment variable that we will need in the container at runtime
 ENV SPARK_HOME=/spark-3.5.3-bin-hadoop3
