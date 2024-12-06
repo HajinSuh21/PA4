@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, explode
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 from pyspark import SparkFiles
 import requests
 import json
@@ -15,7 +16,12 @@ if __name__ == "__main__":
 
     # json_file_path = SparkFiles.get("incorrect_count.json")
 
-    df = spark.read.json(local_json_path)
+    schema = StructType([
+        StructField("Latency", IntegerType(), True),
+        StructField("IsCorrect", IntegerType(), True)
+    ])
+
+    df = spark.read.schema(schema).json(local_json_path)
 
     df.printSchema()
 
