@@ -9,11 +9,11 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 local_json_path = "file:///home/cc/team17/PA4/Spark/target/incorrect_count.json"
-# spark.sparkContext.addFile(local_json_path)
+spark.sparkContext.addFile(local_json_path)
 
-# json_file_path = SparkFiles.get("incorrect_count.json")
+json_file_path = SparkFiles.get("incorrect_count.json")
 
-df = spark.read.json(local_json_path)
+df = spark.read.json(json_file_path)
 
 df_transformed = df.select(explode(col("*")).alias("data")) \
     .selectExpr("data.Latency as Latency", "data.IsCorrect as IsCorrect")
