@@ -3,31 +3,10 @@ from pyspark.sql.functions import col
 import requests
 import json
 
-db_ip = "database"
-COUCHDB_URL = f"http://{db_ip}:5984"
-USERNAME = "team"
-PASSWORD = "cloudcomputing"
-DB_NAME = "images_database"
-
-def get_all_documents(COUCHDB_URL, DB_NAME, USERNAME, PASSWORD):
-    # Get all documents in the database
-    response = requests.get(
-        f"{COUCHDB_URL}/{DB_NAME}/_all_docs?include_docs=true", auth=(USERNAME, PASSWORD))
-    if response.status_code == 200:
-        print(f"SUCCESS FETCHING DOCS")
-        return response.json()['rows']
-    else:
-        print(f"Error fetching documents: {response.json()}")
-        return []
-
 spark = SparkSession.builder \
+    .builder \
     .appName("Incorrect Predictions Count") \
     .getOrCreate()
-
-documents = get_all_documents(COUCHDB_URL, DB_NAME, USERNAME, PASSWORD)
-# data = []
-for doc in documents:
-    print(doc)
 
 # data = []
 # for doc in documents:

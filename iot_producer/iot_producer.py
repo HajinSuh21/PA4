@@ -37,6 +37,7 @@ from kafka import KafkaConsumer  # consumer of events
 producer_id = sys.argv[1]
 total_images = 1000
 latencies = {}
+incorrect_count = {}
 
 # We can make this more sophisticated/elegant but for now it is just
 # hardcoded to the setup I have on my local VMs
@@ -117,6 +118,13 @@ def consume():
             print("consumed", total_images - images_left)
             # measure request end time in ms with plus sign
             latencies[prediction_id] += int(time.time() * 1000)
+
+            is_correct = prediction["IsCorrect"]
+            incorrect_count[prediction_id] = {
+                "Latency": latencies[prediction_id],
+                "IsCorrect": is_correct
+            }
+
             if images_left == 0:  # There are no images left
                 break
         time.sleep(0.001)
@@ -142,5 +150,5 @@ if __name__ == "__main__":
 
     # Print the results to the file
     with open("/app/output/" + producer_id + ".json", "w") as file:
-        json.dump(latencies, file)
+        json.dump(incorrect_count, file, indent = 4)
     print("done")

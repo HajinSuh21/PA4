@@ -12,40 +12,39 @@
 # sudo kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 # sudo systemctl restart kubelet docker containerd
 
-# sudo docker pull wurstmeister/kafka
-# sudo docker tag wurstmeister/kafka 192.168.1.81:5000/team17/kafka
-# sudo docker push 192.168.1.81:5000/team17/kafka
+sudo docker pull wurstmeister/kafka
+sudo docker tag wurstmeister/kafka 192.168.1.81:5000/team17/kafka
+sudo docker push 192.168.1.81:5000/team17/kafka
 
-# sudo docker pull couchdb
-# sudo docker tag couchdb 192.168.1.81:5000/team17/database
-# sudo docker push 192.168.1.81:5000/team17/database
+sudo docker pull couchdb
+sudo docker tag couchdb 192.168.1.81:5000/team17/database
+sudo docker push 192.168.1.81:5000/team17/database
 
-# sudo docker pull wurstmeister/zookeeper
-# sudo docker tag wurstmeister/zookeeper 192.168.1.81:5000/team17/zookeeper
-# sudo docker push 192.168.1.81:5000/team17/zookeeper
+sudo docker pull wurstmeister/zookeeper
+sudo docker tag wurstmeister/zookeeper 192.168.1.81:5000/team17/zookeeper
+sudo docker push 192.168.1.81:5000/team17/zookeeper
 
+sudo docker build -f ./inference_consumer/dockerfile -t inference-consumer .
+sudo docker tag inference-consumer 192.168.1.81:5000/team17/inference-consumer
+sudo docker push 192.168.1.81:5000/team17/inference-consumer
 
-# sudo docker build -f ./inference_consumer/dockerfile -t inference-consumer .
-# sudo docker tag inference-consumer 192.168.1.81:5000/team17/inference-consumer
-# sudo docker push 192.168.1.81:5000/team17/inference-consumer
+sudo docker build -f ./db_consumer/dockerfile -t database-consumer .
+sudo docker tag database-consumer 192.168.1.81:5000/team17/database-consumer
+sudo docker push 192.168.1.81:5000/team17/database-consumer
 
-# sudo docker build -f ./db_consumer/dockerfile -t database-consumer .
-# sudo docker tag database-consumer 192.168.1.81:5000/team17/database-consumer
-# sudo docker push 192.168.1.81:5000/team17/database-consumer
+sudo docker build -f ./iot_producer/dockerfile -t iot-producer .
+sudo docker tag iot-producer 192.168.1.81:5000/team17/iot-producer
+sudo docker push 192.168.1.81:5000/team17/iot-producer
 
-# sudo docker build -f ./iot_producer/dockerfile -t iot-producer .
-# sudo docker tag iot-producer 192.168.1.81:5000/team17/iot-producer
-# sudo docker push 192.168.1.81:5000/team17/iot-producer
+sudo docker build -f ./Spark/spark_dockerfile -t my-spark .
+sudo docker tag my-spark:latest 192.168.1.81:5000/team17/my-spark
+sudo docker push 192.168.1.81:5000/team17/my-spark
 
-# sudo docker build -f ./Spark/spark_dockerfile -t my-spark .
-# sudo docker tag my-spark:latest 192.168.1.81:5000/team17/my-spark
-# sudo docker push 192.168.1.81:5000/team17/my-spark
+# sudo docker build -f ./Spark/mapreduce_dockerfile -t mapreduce-spark .
+# sudo docker tag mapreduce-spark:latest 192.168.1.81:5000/team17/mapreduce-spark
+# sudo docker push 192.168.1.81:5000/team17/mapreduce-spark
 
-sudo docker build -f ./Spark/mapreduce_dockerfile -t mapreduce-spark .
-sudo docker tag mapreduce-spark:latest 192.168.1.81:5000/team17/mapreduce-spark
-sudo docker push 192.168.1.81:5000/team17/mapreduce-spark
-
-kubectl apply -f ./Job/mapreduce-spark-job.yaml
+# kubectl apply -f ./Job/mapreduce-spark-job.yaml
 
 kubectl apply -f ./Spark/spark-master-svc.yaml
 kubectl apply -f ./Spark/spark-driver-svc.yaml
