@@ -24,7 +24,7 @@ RUN pip install --upgrade pip && \
 
 # Copy the Python script into the Docker container
 COPY ./Spark/mapreduce_spark.py /app/mapreduce_spark_docker.py
-COPY ./Spark/target/incorrect_count.json
+COPY ./Spark/target/incorrect_count.json /app incorrect_count.json
 
 RUN mkdir -p /app/output
 # Set the working directory
