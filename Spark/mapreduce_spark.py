@@ -7,7 +7,7 @@ spark = SparkSession.builder \
     .appName("Incorrect Predictions Count") \
     .getOrCreate()
 
-incorrect_count_json = "./Spark/target/incorrect_count.json"
+incorrect_count_json = "/home/cc/team17/PA4/Spark/target/incorrect_count.json"
 df = spark.read.json(incorrect_count_json)
 
 df_transformed = df.select(explode(col("*")).alias("data")) \
