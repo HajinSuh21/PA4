@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, explode
 import requests
 import json
 
@@ -7,18 +7,14 @@ spark = SparkSession.builder \
     .appName("Incorrect Predictions Count") \
     .getOrCreate()
 
-# data = []
-# for doc in documents:
-#     if 'doc' in doc:
-#         record = doc['doc']
-#         # Ensure both ground_truth and prediction are present
-#         if 'ground_truth' in record and 'prediction' in record:
-#             data.append((record['ground_truth'], record['prediction']))
+incorrect_count_json = "./Spark/target/incorrect_count.json"
+df = spark.read.json(incorrect_count_json)
 
-# df = spark.createDataFrame(data, ["ground_truth", "prediction"])
+df_transformed = df.select(explode(col("*")).alias("data")) \
+    .selectExpr("data.Latency as Latency", "data.IsCorrect as IsCorrect")
 
-# incorrect_predictions_count = df.filter(col("ground_truth") != col("prediction")).count()
+incorrect_count = df_transformed.filter(col("IsCorrect") == 0).count()
 
-# print(f"Total incorrect predictions: {incorrect_predictions_count}")
+print(f"Total incorrect predictions: {incorrect_count}")
 
-# spark.stop()
+spark.stop()
