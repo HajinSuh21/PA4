@@ -8,7 +8,7 @@ spark = SparkSession.builder \
     .appName("Incorrect Predictions Count") \
     .getOrCreate()
 
-incorrect_count_json = "file:///home/cc/team17/PA4/Spark/target/incorrect_count.json"
+incorrect_count_json = "/home/cc/team17/PA4/Spark/target/incorrect_count.json"
 spark.sparkContext.addFile(incorrect_count_json)
 
 json_file_path = SparkFiles.get("incorrect_count.json")
