@@ -19,11 +19,13 @@ if __name__ == "__main__":
 
     df.printSchema()
 
-    df_transformed = df.select(explode(df.columns[0]).alias("key", "data")) \
-        .selectExpr("data.Latency as Latency", "data.IsCorrect as IsCorrect")
+    # df_transformed = df.select(explode(df.columns[0]).alias("key", "data")) \
+    #     .selectExpr("data.Latency as Latency", "data.IsCorrect as IsCorrect")
 
-    incorrect_count = df_transformed.filter(col("IsCorrect") == 0).count()
+    # incorrect_count = df_transformed.filter(col("IsCorrect") == 0).count()
 
-    print(f"Total incorrect predictions: {incorrect_count}")
+    # incorrect_count = df.filter(col("IsCorrect") == 0).count()
+
+    # print(f"Total incorrect predictions: {incorrect_count}")
 
     spark.stop()
