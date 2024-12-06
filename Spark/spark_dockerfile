@@ -19,6 +19,7 @@ ENV PATH="/app/venv/bin:$PATH"
 
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install --upgrade pyspark
+RUN python3 -m install requests
 
 # Note, I have added several other packages that provide networking utilities like
 # ping, nslookup, ifconfig etc.

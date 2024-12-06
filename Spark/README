@@ -106,8 +106,8 @@ once inside, then issue the following long command to run the Wordcount example
 
     ${SPARK_HOME}/bin/spark-submit --master spark://spark-master-svc \
      --properties-file ${SPARK_HOME}/conf/spark-driver.conf \
-     /home/cc/team17/PA4/Spark/mapreduce_spark.py \
-     /home/cc/team17/PA4/Spark/target/incorrect_count.json
+     mapreduce_spark.py \
+     incorrect_count.json
 
 
 
