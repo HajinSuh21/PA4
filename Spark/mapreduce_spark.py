@@ -30,8 +30,8 @@ if __name__ == "__main__":
 
     # incorrect_count = df_transformed.filter(col("IsCorrect") == 0).count()
 
-    # incorrect_count = df.filter(col("IsCorrect") == 0).count()
+    incorrect_count = df.filter(col("IsCorrect") == 0).count()
 
-    # print(f"Total incorrect predictions: {incorrect_count}")
+    print(f"Total incorrect predictions: {incorrect_count}")
 
     spark.stop()
