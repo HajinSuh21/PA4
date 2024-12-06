@@ -17,7 +17,9 @@ if __name__ == "__main__":
 
     df = spark.read.json(local_json_path)
 
-    df_transformed = df.select(explode(col("*")).alias("data")) \
+    df.printSchema()
+
+    df_transformed = df.select(explode(df.columns[0]).alias("key", "data")) \
         .selectExpr("data.Latency as Latency", "data.IsCorrect as IsCorrect")
 
     incorrect_count = df_transformed.filter(col("IsCorrect") == 0).count()
