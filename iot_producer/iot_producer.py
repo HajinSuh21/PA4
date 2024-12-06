@@ -120,11 +120,10 @@ def consume():
             latencies[prediction_id] += int(time.time() * 1000)
 
             is_correct = prediction["IsCorrect"]
-            # incorrect_count[prediction_id] = {
-            #     "Latency": latencies[prediction_id],
-            #     "IsCorrect": is_correct
-            # }
-            incorrect_count["IsCorrect"] = is_correct
+            incorrect_count[prediction_id] = {
+                "Latency": latencies[prediction_id],
+                "IsCorrect": is_correct
+            }
 
             if images_left == 0:  # There are no images left
                 break
