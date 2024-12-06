@@ -41,7 +41,7 @@ spec:                     # This is the specification where we can even put the 
             # the SPARK_HOME env set in docker image is not accessible for the command line
             # below. So had to set it here.
             - name: SPARK_HOME  
-              value: "/spark-3.5.3-bin-hadoop3.2"
+              value: "/spark-3.5.3-bin-hadoop3"
 
           imagePullPolicy: Always  # This forces the node to pull the image
           command: ["$(SPARK_HOME)/sbin/start-worker.sh"]
