@@ -70,8 +70,8 @@ Ensure security groups and ufw rules are set for the two VMs.
 
 (1) First start the services for the spark master and driver on the K8s master node.
 
-    kubectl apply -f spark-master-svc.yaml
-    kubectl apply -f spark-driver-svc.yaml
+    kubectl apply -f Spark/spark-master-svc.yaml
+    kubectl apply -f Spark/spark-driver-svc.yaml
 
 (2) Check and ensure that all services are registered
 
@@ -80,13 +80,13 @@ Ensure security groups and ufw rules are set for the two VMs.
 
 (3) Now start the deployments in this order
 
-    kubectl apply -f spark-master-deploy.yaml
+    kubectl apply -f Spark/spark-master-deploy.yaml
 
 after a short pause,
 
-    kubectl apply -f spark-worker-deploy.yaml
+    kubectl apply -f Spark/spark-worker-deploy.yaml
     
-    kubectl apply -f spark-driver-deploy.yaml
+    kubectl apply -f Spark/spark-driver-deploy.yaml
 
 (4) Check and ensure that all pods are deployed
 
