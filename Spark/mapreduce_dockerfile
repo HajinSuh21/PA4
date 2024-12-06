@@ -20,7 +20,9 @@ RUN python3 -m venv /app/venv
 ENV PATH="/app/venv/bin:$PATH"
 # Activate the virtual environment and install necessary Python packages via pip
 RUN pip install --upgrade pip && \
-    pip install kafka-python requests pyspark
+    pip install kafka-python requests
+    
+RUN python3 -m pip install --upgrade pyspark
 
 # Copy the Python script into the Docker container
 COPY ./Spark/mapreduce_spark.py /app/mapreduce_spark_docker.py
