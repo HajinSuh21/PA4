@@ -4,7 +4,6 @@ import requests
 import json
 
 spark = SparkSession.builder \
-    .builder \
     .appName("Incorrect Predictions Count") \
     .getOrCreate()
 
