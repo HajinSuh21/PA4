@@ -1,4 +1,5 @@
 {
+"source": {
     "iot_producer_two_1_0": {
         "Latency": 249,
         "IsCorrect": 0
@@ -3998,5 +3999,6 @@
     "iot_producer_two_1_999": {
         "Latency": 103,
         "IsCorrect": 0
+    }
     }
 }
