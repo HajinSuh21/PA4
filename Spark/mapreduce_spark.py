@@ -14,7 +14,7 @@ if __name__ == "__main__":
     rdd = spark.read.text(sys.argv[1]).rdd.map(lambda r: r[0])
 
     incorrect_count = rdd.flatMap(lambda x: x.split(",")) \
-                    .filter(lambda v: ": 1" in v) \
+                    .filter(lambda v: ": 0" in v) \
                     .count()
 
     print(f"Total number of incorrect predictions: {incorrect_count}")

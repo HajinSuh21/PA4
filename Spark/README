@@ -143,7 +143,7 @@ once inside, then issue the following long command to run the Wordcount example
     To get mapreduce_spark.py to run
     -Build my-spark image in docker
     -Apply my-spark job in k8s
-    -kubectl exec -it <driver pod full instance id> -- /usr/bin/bash
+    -kubectl exec -it spark-driver-deploy-7f7f98cb95-vtpm8 -n team17 -- /usr/bin/bash
     -Run spark-submit command
 
     Edit these files
@@ -188,7 +188,7 @@ once inside, then issue the following long command to run the Wordcount example
         -
     2. CH-819381
         - Use 5 producer job
-            kubectl cp default/<pod-name>:/app/output/iot_producer_one_1.json ./Spark/target/incorrect_count.txt
+            kubectl cp team17/iot-producer1-lxp5m:/app/output/iot_producer_one_1.json ./Spark/target/incorrect_count.txt
         - Wait to run
         - Copy txt to local folder
         - Recreate spark docker
