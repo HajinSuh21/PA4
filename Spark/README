@@ -118,7 +118,7 @@ once inside, then issue the following long command to run the Wordcount example
   --master spark://spark-master-svc.team17.svc.cluster.local:7077 \
   --properties-file ${SPARK_HOME}/conf/spark-driver.conf \
   /mapreduce_spark.py \
-  /incorrect_count.json
+  /incorrect_count.txt
 
 
      delete docker image

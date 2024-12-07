@@ -150,6 +150,7 @@ if __name__ == "__main__":
     print("completed two threads")
 
     # Print the results to the file
-    with open("/app/output/" + producer_id + ".json", "w") as file:
-        json.dump(incorrect_count, file, indent = 4)
+    with open("/app/output/" + producer_id + ".txt", "w") as file:
+        for key, value in incorrect_count.items():
+            file.write(f"{key}: {value}\n")
     print("done")
