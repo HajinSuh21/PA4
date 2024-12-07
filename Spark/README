@@ -177,3 +177,19 @@ once inside, then issue the following long command to run the Wordcount example
     Next steps
     -figure out logic to read current JSON (do steps to apply mapreduce_spark.py changes)
         -if this fails, then i will create a txt to read from (do steps to create new txt --> alter iot_producer && do steps to apply new txt --> alter spark_dockerfile)
+
+
+
+
+
+
+    DEMO SCRIPT
+    1. 4-VM
+        -
+    2. CH-819381
+        - Use 5 producer job
+        - Wait to run
+        - Copy txt to local folder
+        - Recreate spark docker
+        - Reapply spark driver
+        - Run command inside driver
