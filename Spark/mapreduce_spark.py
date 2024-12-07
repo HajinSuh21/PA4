@@ -13,13 +13,10 @@ if __name__ == "__main__":
 
     rdd = spark.read.text(sys.argv[1]).rdd
 
-    pairs_rdd = rdd.flatMap(lambda x: [(k, v) for k, v in eval(x[0]).items()])
+    ones_count = rdd.flatMap(lambda x: eval(x[0]).values()) \
+                    .filter(lambda v: v == 1) \
+                    .count()
 
-    counts_rdd = pairs_rdd.map(lambda x: (x, 1)) \
-                          .reduceByKey(lambda a, b: a + b)
-
-    results = counts_rdd.collect()
-    for pair, count in results:
-        print(f"{pair}: {count}")
+    print(f"Total number of incorrect predictions: {ones_count}")
 
     spark.stop()
