@@ -109,7 +109,71 @@ once inside, then issue the following long command to run the Wordcount example
      mapreduce_spark.py \
      incorrect_count.json
 
+    ${SPARK_HOME}/bin/spark-submit --master spark://spark-master-svc \
+     --properties-file ${SPARK_HOME}/conf/spark-driver.conf \
+     mapreduce_spark.py \
+     ${SPARK_HOME}/examples/src/main/resources/people.txt
+
+    ${SPARK_HOME}/bin/spark-submit \
+  --master spark://spark-master-svc.team17.svc.cluster.local:7077 \
+  --properties-file ${SPARK_HOME}/conf/spark-driver.conf \
+  /mapreduce_spark.py \
+  ${SPARK_HOME}/examples/src/main/resources/people.txt
 
 
+     delete docker image
+     remake docker image
+
+     delete deployments
+     redeploy
 
 
+    To get JSON
+    -Build all images on reg1 docker
+        -my-spark
+        -inference-consumer
+        -iot-producer
+        -database-consumer
+        -database
+        -kafka
+        -zookeeper
+    -Apply them in K8s in cm1 cluster
+    -cp incorrect_count.json to local Spark/target
+
+    To get mapreduce_spark.py to run
+    -Build my-spark image in docker
+    -Apply my-spark job in k8s
+    -kubectl exec -it <driver pod full instance id> -- /usr/bin/bash
+    -Run spark-submit command
+
+    Edit these files
+    -spark_dockerfile
+    -spark-<TYPE>-deploy.yaml
+    -mapreduce_spark.py
+    -iot_producer.py
+    -REMEMBER TO PUSH TO GIT AND PULL
+
+    To apply edits
+    -delete docker image
+    -remake docker image
+    -delete deployments (3)
+    -redeploy
+        -should see spark pods running well (driver, master, worker)
+
+    To edit/change iot_producer.py
+    -make changes
+    -delete iot-producer/inference-consumer docker images
+    -remake docker images
+    -delete job/deployment
+    -apply job/deployment
+    -wait for pods to run
+    -save created JSON
+        -kubectl cp default/<pod-name>:/app/output/iot_producer_one_1.json ./Spark/target/incorrect_count.json
+    -REMEMBER TO PUSH TO GIT AND PULL
+
+    If I want to use a new JSON
+    -redo docker steps for spark
+
+    Next steps
+    -figure out logic to read current JSON (do steps to apply mapreduce_spark.py changes)
+        -if this fails, then i will create a txt to read from (do steps to create new txt --> alter iot_producer && do steps to apply new txt --> alter spark_dockerfile)
