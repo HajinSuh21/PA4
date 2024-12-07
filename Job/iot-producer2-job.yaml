@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: iot-producer2
-        image: 192.168.1.81:5000//team17/iot-producer
+        image: 192.168.1.81:5000/team17/iot-producer
         imagePullPolicy: Always
         command: ["sh", "-c"]
         args: ["python3 iot_producer_docker.py iot_producer_2 && sleep 3600"]
