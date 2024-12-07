@@ -11,12 +11,12 @@ if __name__ == "__main__":
         .appName("Incorrect Producer Count") \
         .getOrCreate()
 
-    rdd = spark.read.json(sys.argv[1]).rdd
+    rdd = spark.read.text(sys.argv[1]).rdd.map(lambda r: r[0])
 
-    ones_count = rdd.flatMap(lambda x: json.loads(x[0]).values()) \
-                    .filter(lambda v: v == 1) \
+    incorrect_count = rdd.flatMap(lambda x: x.split(",")) \
+                    .filter(lambda v: ": 1" in v) \
                     .count()
 
-    print(f"Total number of incorrect predictions: {ones_count}")
+    print(f"Total number of incorrect predictions: {incorrect_count}")
 
     spark.stop()
