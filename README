@@ -1,0 +1,22 @@
+To get txt
+    - Build all images on reg1 docker
+        -my-spark
+        -inference-consumer
+        -iot-producer
+        -database-consumer
+        -database
+        -kafka
+        -zookeeper
+    - Apply them in K8s in cm1 cluster
+    - cp incorrect_count.txt to local Spark/target after producer is done running
+
+
+To run mapreduce
+    - Rebuild my-spark image on reg1 docker
+    - kubectl exec -it <driver-pod-name> -n team17 -- /usr/bin/bash
+    - Run
+        {SPARK_HOME}/bin/spark-submit \
+        --master spark://spark-master-svc.team17.svc.cluster.local:7077 \
+        --properties-file ${SPARK_HOME}/conf/spark-driver.conf \
+        /mapreduce_spark.py \
+        /incorrect_count.txt
