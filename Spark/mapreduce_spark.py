@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     rdd = spark.read.text(sys.argv[1]).rdd
 
-    ones_count = rdd.flatMap(lambda x: eval(x[0]).values()) \
+    ones_count = rdd.flatMap(lambda x: json.loads(x[0]).values()) \
                     .filter(lambda v: v == 1) \
                     .count()
 
